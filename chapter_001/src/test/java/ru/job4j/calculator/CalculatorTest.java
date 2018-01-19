@@ -10,33 +10,35 @@ public class CalculatorTest {
     public void whenAddOnePlusOneThenTwo() {
         Calculator calc = new Calculator();
         calc.add(1D, 1D);
-        double resultAdd = calc.getResultAdd();
-        double expectedAdd = 2D;
-        assertThat(resultAdd, is(expectedAdd));
+        double result = calc.getResult();
+        double expected = 2D;
+        assertThat(result, is(expected));
     }
+
     @Test
     public void whenSubtractTwoMinusOneThenOne() {
         Calculator calc = new Calculator();
         calc.subtract(2D, 1D);
-        double resultSub = calc.getResultSub();
-        double expectedSub = 1D;
-        assertThat(resultSub, is(expectedSub));
+        double result = calc.getResult();
+        double expected = 1D;
+        assertThat(result, is(expected));
     }
+
     @Test
     public void whenDivFourDevideTwoThenTwo() {
         Calculator calc = new Calculator();
         calc.div(4D, 2D);
-        double resultDiv = calc.getResultDiv();
-        double expectedDiv = 2D;
-        assertThat(resultDiv, is(expectedDiv));
+        double result = calc.getResult();
+        double expected = 2D;
+        assertThat(result, is(expected));
     }
+
     @Test
     public void whenMultipleTwoMultiplyTwoThenFour() {
         Calculator calc = new Calculator();
         calc.multiple(2D, 2D);
-        double resultMult = calc.getResultMult();
-        double expectedMult = 4D;
-        assertThat(resultMult, is(expectedMult));
+        double result = calc.getResult();
+        double expected = 4D;
+        assertThat(result, is(expected));
     }
-
 }
