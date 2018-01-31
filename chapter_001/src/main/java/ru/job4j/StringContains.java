@@ -12,10 +12,6 @@ public class StringContains {
 				}
 			}
 		}
-		if (counter >= subLength) {
-			return true;
-		} else {
-			return false;
-		}
+		return counter >= subLength;
 	}
 }
