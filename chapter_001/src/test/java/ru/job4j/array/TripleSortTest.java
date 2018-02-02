@@ -8,8 +8,8 @@ public class TripleSortTest {
 	@Test
 	public void whenTwoUnsortedArraysThenOneSorted() {
 		TripleSort twoArrays = new TripleSort();
-		int[] result = twoArrays.bigSort(new int[] {3, 4, 1, 7}, new int[] {5, 2, 6});
-		int[] expected = new int[] {1, 2, 3, 4, 5, 6, 7};
+		int[] result = twoArrays.bigSort(new int[] {1, 3, 5, 10, 99}, new int[] {2, 4, 6, 11, 12});
+		int[] expected = new int[] {1, 2, 3, 4, 5, 6, 10, 11, 12, 99};
 		assertArrayEquals(result, expected);
 	}
 }
