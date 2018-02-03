@@ -2,25 +2,23 @@ package ru.job4j.array;
 
 public class TripleSort {
 	public int[] bigSort(int[] arrayOne, int[] arrayTwo) {
-		int i = 0, j = 0, k = 0;
 		int[] bigArray = new int[arrayOne.length + arrayTwo.length];
 
-		while (i < arrayOne.length && j < arrayTwo.length) {
-			bigArray[k] = arrayOne[i] < arrayTwo[j] ? arrayOne[i] : arrayTwo[j];
-			bigArray[k + 1] = arrayTwo[j] > arrayOne[i] ? arrayTwo[j] : arrayOne[i];
-			k = k + 2;
-			i++;
-			j++;
-		}
-		while(i >= arrayOne.length && k < bigArray.length) {
-			bigArray[k] = arrayTwo[j];
-			j++;
-			k++;
-		}
-		while (j >= arrayTwo.length && k < bigArray.length) {
-			bigArray[k] = arrayOne[i];
-			i++;
-			k++;
+		int firstIndex = 0, secondIndex = 0;
+		for (int i = 0; i < bigArray.length; i++) {
+			if (firstIndex >= arrayOne.length) {
+				bigArray[i] = arrayTwo[secondIndex];
+				secondIndex++;
+			} else if (secondIndex >= arrayTwo.length) {
+				bigArray[i] = arrayOne[firstIndex];
+				firstIndex++;
+			} else if (arrayOne[firstIndex] < arrayTwo[secondIndex]) {
+				bigArray[i] = arrayOne[firstIndex];
+				firstIndex++;
+			} else {
+				bigArray[i] = arrayTwo[secondIndex];
+				secondIndex++;
+			}
 		}
 		return bigArray;
 	}
