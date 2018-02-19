@@ -17,6 +17,7 @@ public class Tracker {
 		this.items[this.position++] = item;
 		return item;
 	}
+
 	/**
 	 * Метод генерирует уникальный ключ для заявки.
 	 *
@@ -25,6 +26,7 @@ public class Tracker {
 	String generateId() {
 		return String.valueOf(System.currentTimeMillis() + RN.nextInt());
 	}
+
 	/**
 	 * редактирование заявок
 	 * должен заменить ячейку в массиве this.items. Для этого необходимо найти ячейку в массиве по id
@@ -39,6 +41,7 @@ public class Tracker {
 			}
 		}
 	}
+
 	/**
 	 * удаление заявок
 	 *
@@ -47,10 +50,12 @@ public class Tracker {
 	public void delete(String id) {
 		for (int index = 0; index != this.position; index++) {
 			if (this.items[index].getId().equals(id)) {
-				System.arraycopy(this.items, 0, this.items, index, this.position - 1);
+				System.arraycopy(this.items, index + 1, this.items, index, this.position - index - 1);
+				break;
 			}
 		}
 	}
+
 	/**
 	 * получение списка всех заявок
 	 *
@@ -63,6 +68,7 @@ public class Tracker {
 		}
 		return result;
 	}
+
 	/**
 	 * получение списка по имени
 	 *
@@ -79,6 +85,7 @@ public class Tracker {
 		}
 		return result;
 	}
+
 	/**
 	 * получение заявки по id
 	 *

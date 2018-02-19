@@ -7,7 +7,6 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertArrayEquals;
 
 
-
 public class TrackerTest {
 	@Test
 	public void whenAddNewItemThenTrackerHasSameItem() {
@@ -39,10 +38,13 @@ public class TrackerTest {
 		Item item2 = new Item("test2", "testDescription");
 		tracker.add(item2);
 		Item item3 = new Item("test3", "testDescription");
-		tracker.delete(item3.getId());
-		Item[] expect = {item1, item2};
-		assertArrayEquals(tracker.findAll(), expect);
+		tracker.add(item3);
+		tracker.delete(item2.getId());
+		Item[] actual = {item1, item2, item3};
+		Item[] expect = {item1, item3, null};
+		assertArrayEquals(actual, expect);
 	}
+
 	@Test
 	public void whenAddItemsThenFindAll() {
 		Tracker tracker = new Tracker();
@@ -55,6 +57,7 @@ public class TrackerTest {
 		Item[] expect = {item1, item2, item3};
 		assertArrayEquals(tracker.findAll(), expect);
 	}
+
 	@Test
 	public void whenAddItemThenFindByName() {
 		Tracker tracker = new Tracker();
@@ -66,6 +69,7 @@ public class TrackerTest {
 		Item[] expect = tracker.findByName(item1.getName());
 		assertThat(actual, is(expect));
 	}
+
 	@Test
 	public void whenAddItemThenFindById() {
 		Tracker tracker = new Tracker();
