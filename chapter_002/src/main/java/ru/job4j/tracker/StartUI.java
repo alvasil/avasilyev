@@ -122,7 +122,7 @@ public class StartUI {
 		System.out.println("--- Поиск заявок по имени ---");
 		String name = this.input.ask("Введите имя заявки : ");
 		for (int i = 0; i != this.tracker.findAll().length; i++) {
-			System.out.println("Заявка с данным именем имеет id: " + this.tracker.findByName(name)[i].getId() + " и описание: " + this.tracker.findByName(name)[i].getDesc());
+			System.out.println("Заявка с данным именем имеет id: " + this.tracker.findByName(name)[i].getId());
 		}
 	}
 
