@@ -40,9 +40,7 @@ public class TrackerTest {
 		Item item3 = new Item("test3", "testDescription");
 		tracker.add(item3);
 		tracker.delete(item2.getId());
-		Item[] actual = {item1, item2, item3};
-		Item[] expect = {item1, item3, null};
-		assertArrayEquals(actual, expect);
+		assertThat(tracker.findAll()[1], is(item3));
 	}
 
 	@Test
