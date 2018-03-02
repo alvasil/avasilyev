@@ -25,7 +25,6 @@ public class ConvertList {
 	/**
 	 * метод toArray должен равномерно разбить лист на количество строк двумерного массива.
 	 * В методе toArray должна быть проверка - если количество элементов не кратно количеству строк - оставшиеся значения в массиве заполнять нулями.
-	 * использовать foreach.
 	 *
 	 * @param list - входящий List.
 	 * @param rows - количество строк.
@@ -44,5 +43,33 @@ public class ConvertList {
 			}
 		}
 		return arrayFromList;
+	}
+
+	/**
+	 * В этом методе вы должны пройтись по всем элементам всех массивов в списке list и добавить их в один общий лист Integer.
+	 * Массивы в списке list могут быть разного размера.
+	 *
+	 * @param list - массив в списке list
+	 * @return - общий лист Integer.
+	 */
+	public List<Integer> convert(List<int[]> list) {
+		for (int[] array : list) {
+			for (int item : array) {
+				this.listFromArray.addLast(item);
+			}
+		}
+		return this.listFromArray;
+	}
+
+	/**
+	 * метод добавляет входящий массив в лист с массивами.
+	 *
+	 * @param array - входящий одномерный массив.
+	 * @return - лист, который хранит массивы.
+	 */
+	public List<int[]> add(int[] array) {
+		List<int[]> result = new LinkedList<>();
+		result.add(array);
+		return result;
 	}
 }
