@@ -2,9 +2,10 @@ package ru.job4j.tracker;
 
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertThat;
 
 
 public class TrackerTest {
@@ -13,7 +14,7 @@ public class TrackerTest {
 		Tracker tracker = new Tracker();
 		Item item = new Item("test1", "testDescription");
 		tracker.add(item);
-		assertThat(tracker.findAll()[0], is(item));
+		assertThat(tracker.findAll().get(0), is(item));
 	}
 
 	@Test
@@ -40,7 +41,7 @@ public class TrackerTest {
 		Item item3 = new Item("test3", "testDescription");
 		tracker.add(item3);
 		tracker.delete(item2.getId());
-		assertThat(tracker.findAll()[1], is(item3));
+		assertThat(tracker.findAll().get(1), is(item3));
 	}
 
 	@Test
@@ -52,8 +53,8 @@ public class TrackerTest {
 		tracker.add(item2);
 		Item item3 = new Item("test3", "testDescription");
 		tracker.add(item3);
-		Item[] expect = {item1, item2, item3};
-		assertArrayEquals(tracker.findAll(), expect);
+		List<Item> expect = tracker.findAll();
+		assertThat(expect.contains(item3), is(true));
 	}
 
 	@Test
@@ -63,9 +64,8 @@ public class TrackerTest {
 		tracker.add(item1);
 		Item item2 = new Item("test2", "testDescription", tracker.generateId());
 		tracker.add(item2);
-		Item[] actual = {item1};
-		Item[] expect = tracker.findByName(item1.getName());
-		assertThat(actual, is(expect));
+		List<Item> expect = tracker.findByName(item1.getName());
+		assertThat(tracker.findAll().get(0), is(expect.get(0)));
 	}
 
 	@Test

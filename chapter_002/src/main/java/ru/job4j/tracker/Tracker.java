@@ -1,10 +1,11 @@
 package ru.job4j.tracker;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Tracker {
-	private final Item[] items = new Item[100];
-	private int position = 0;
+	private List<Item> items = new ArrayList<>();
 	private static final Random RN = new Random();
 
 	/**
@@ -14,7 +15,7 @@ public class Tracker {
 	 */
 	public Item add(Item item) {
 		item.setId(this.generateId());
-		this.items[this.position++] = item;
+		this.items.add(item);
 		return item;
 	}
 
@@ -31,13 +32,13 @@ public class Tracker {
 	 * редактирование заявок
 	 * должен заменить ячейку в массиве this.items. Для этого необходимо найти ячейку в массиве по id
 	 *
-	 * @param id
-	 * @param item
+	 * @param id   - уникальный ключ заявки
+	 * @param item - заявка в коллекции
 	 */
 	public void replace(String id, Item item) {
-		for (int index = 0; index != this.position; index++) {
-			if (this.items[index] != null && this.items[index].getId().equals(id)) {
-				this.items[index] = item;
+		for (Item elem : this.items) {
+			if (elem != null && elem.getId().equals(id)) {
+				elem = item;
 				break;
 			}
 		}
@@ -46,12 +47,13 @@ public class Tracker {
 	/**
 	 * удаление заявок
 	 *
-	 * @param id
+	 * @param id - уникальный ключ.
 	 */
 	public void delete(String id) {
-		for (int index = 0; index != this.position; index++) {
-			if (this.items[index].getId().equals(id)) {
-				System.arraycopy(this.items, index + 1, this.items, index, this.position - index - 1);
+		for (Item elem : this.items) {
+			if (elem != null && elem.getId().equals(id)) {
+				int index = this.items.indexOf(elem);
+				this.items.remove(index);
 				break;
 			}
 		}
@@ -62,26 +64,21 @@ public class Tracker {
 	 *
 	 * @return список заявок
 	 */
-	public Item[] findAll() {
-		Item[] result = new Item[this.position];
-		for (int index = 0; index != this.position; index++) {
-			result[index] = this.items[index];
-		}
-		return result;
+	public List<Item> findAll() {
+		return this.items;
 	}
 
 	/**
 	 * получение списка по имени
 	 *
-	 * @param key
-	 * @return
+	 * @param key - имя заявки
+	 * @return - лист заявок
 	 */
-	public Item[] findByName(String key) {
-		Item[] result = new Item[this.position];
-		for (int index = 0; index != this.position; index++) {
-			if (this.items[index] != null && this.items[index].getName().equals(key)) {
-				result[index] = this.items[index];
-				break;
+	public List<Item> findByName(String key) {
+		List<Item> result = new ArrayList<>();
+		for (Item elem : this.items) {
+			if (elem != null && elem.getName().contains(key)) {
+				result.add(elem);
 			}
 		}
 		return result;
@@ -90,7 +87,7 @@ public class Tracker {
 	/**
 	 * получение заявки по id
 	 *
-	 * @param id
+	 * @param id - уникальный ключ заявки.
 	 * @return
 	 */
 	public Item findById(String id) {
