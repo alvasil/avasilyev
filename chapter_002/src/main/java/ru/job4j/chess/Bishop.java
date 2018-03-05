@@ -27,7 +27,9 @@ public class Bishop extends Figure {
 				cellPassY++;
 				index++;
 			}
-		} else throw new ImpossibleMoveException("impossible direction");
+		} else {
+			throw new ImpossibleMoveException("impossible direction");
+		}
 		return Arrays.copyOf(way, index);
 	}
 
