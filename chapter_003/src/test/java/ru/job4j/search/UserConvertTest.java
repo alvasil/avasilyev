@@ -14,9 +14,9 @@ public class UserConvertTest {
 	public void whenListConvertedToMap() {
 		UserConvert user = new UserConvert();
 		List<User> users = new LinkedList<>();
-		User first = new User(111, "Alex", "Tula");
-		User second = new User(222, "Nick", "Moscow");
-		User third = new User(333, "Serg", "Sochi");
+		User first = new User(111, "Alex");
+		User second = new User(222, "Nick");
+		User third = new User(333, "Serg");
 		users.add(first);
 		users.add(second);
 		users.add(third);
