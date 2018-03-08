@@ -17,7 +17,7 @@ public class ListCompare implements Comparator<String> {
 		int flag = 0;
 		for (int i = 0; i < min; i++) {
 			if (firstArray[i] == secondArray[i]) {
-				flag = flag + firstArray[i] - secondArray[i];
+				break;
 			} else if (firstArray[i] < secondArray[i]) {
 				flag = flag + firstArray[i] - secondArray[i];
 			} else if (firstArray[i] > secondArray[i]) {

@@ -1,7 +1,6 @@
-package ru.job4j.search;
+package ru.job4j.sort;
 
 import org.junit.Test;
-import ru.job4j.sort.ListCompare;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
