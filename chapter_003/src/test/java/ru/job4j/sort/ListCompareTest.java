@@ -17,7 +17,7 @@ public class ListCompareTest {
 	}
 
 	@Test
-	public void whenLeftLessRightThenMunis() {
+	public void whenLeftLessRightThenMinus() {
 		ListCompare compare = new ListCompare();
 		int rst = compare.compare(
 				"Ivanov",
