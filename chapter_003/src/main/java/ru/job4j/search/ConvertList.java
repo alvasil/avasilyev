@@ -1,5 +1,6 @@
 package ru.job4j.search;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class ConvertList {
 	 * @return - возвращает двумерный массив.
 	 */
 	public int[][] toArray(List<Integer> list, int rows) {
+		list = new ArrayList<>(list);
 		while (list.size() % rows != 0) {
 			list.add(0);
 		}

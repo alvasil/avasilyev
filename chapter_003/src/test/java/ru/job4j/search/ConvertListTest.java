@@ -2,6 +2,7 @@ package ru.job4j.search;
 
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
@@ -29,5 +30,14 @@ public class ConvertListTest {
 		List<Integer> result = list.convert(arrayInList);
 		int[] expArray = {1, 2, 3, 4, 5 };
 		assertThat(result.toArray(), is(expArray));
+	}
+
+	@Test
+	public void whenFixedSizeArrayToListAndBackToArray() {
+		ConvertList list = new ConvertList();
+		List<Integer> listFromArray = Arrays.asList(1,2,3);
+		int[][] result = list.toArray(listFromArray, 4);
+		int[][] expArray = {{1}, {2}, {3}, {0}};
+		assertArrayEquals(result, expArray);
 	}
 }
