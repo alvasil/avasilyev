@@ -54,18 +54,17 @@ public class BishopTest {
 		int expected = 2;
 		assertThat(firstPassedCell, is(expected));
 	}
+
 	/**
 	 * possibility move test. If a bishop can't move that way (not diagonally)- throw an exception.
-	 * commit made for special.
 	 */
-//	@Test
-//	public void impossibleMove() throws ImpossibleMoveException {
-//		Cell bishopStart = new Cell(0, 0);
-//		Cell bishopDest = new Cell(3, 4);
-//		Bishop bishop = new Bishop(bishopStart);
-//		Cell[] result = bishop.way(bishopStart, bishopDest);
-//		int firstPassedCell = result[1].getY();
-//		int expected = 2;
-//		assertThat(firstPassedCell, is(expected));
-//	}
+	@Test(expected = ImpossibleMoveException.class)
+	public void impossibleMove() throws ImpossibleMoveException {
+		Cell bishopStart = new Cell(0, 0);
+		Cell bishopDest = new Cell(3, 4);
+		Bishop bishop = new Bishop(bishopStart);
+		Cell[] result = bishop.way(bishopStart, bishopDest);
+		int firstPassedCell = result[1].getY();
+		assertThat(firstPassedCell, is("impossible move"));
+	}
 }
