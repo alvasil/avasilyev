@@ -2,38 +2,37 @@ package ru.job4j.chess;
 
 public class Board {
 	private int numberOfFigures = 0;
-	public Figure[] figures = new Figure[32];
+	private Figure[] figures = new Figure[32];
 
-	public Figure add(Figure figure) {
+	public void add(Figure figure) {
 		this.figures[numberOfFigures++] = figure;
-		return figure;
 	}
 
 	public boolean move(Cell source, Cell dest) throws ImpossibleMoveException, OccupiedWayException, FigureNotFoundException {
 		boolean canMove = false;
-		for (int index = 0; index < numberOfFigures; index++) {
-			if (this.figures[index] != null && (this.figures[index].position.getX() == source.getX()) && this.figures[index].position.getY() == source.getY()) {
+		for (Figure figure : this.figures) {
+			if (figure != null) {
+				if (!figure.position.equals(source)) {
+					throw new FigureNotFoundException("figure is not on a cell");
+				}
+
+				Cell[] way = figure.way(source, dest);
+				for (Cell cell : way) {
+					if (cell == null) {
+						throw new ImpossibleMoveException("impossible move");
+					}
+
+				}
+				for (Cell cell : way) {
+					if (cell.equals(figure.position)) {
+						throw new OccupiedWayException("occupied by another figure");
+					}
+				}
+
 				canMove = true;
-			} else {
-				throw new FigureNotFoundException("figure is not on a cell");
-			}
-			Cell[] way = this.figures[index].way(source, dest);
-			for (int i = 0; i < way.length; i++) {
-				if (way[i] != null) {
-					canMove = true;
-				} else {
-					throw new ImpossibleMoveException("impossible move");
+				if (canMove) {
+					figure.copy(dest);
 				}
-			}
-			for (Cell cell : way) {
-				if (cell.getX() != this.figures[index].position.getX() && cell.getY() != this.figures[index].position.getY()) {
-					canMove = true;
-				} else {
-					throw new OccupiedWayException("occupied by another figure");
-				}
-			}
-			if (canMove) {
-				this.figures[index].copy(dest);
 			}
 		}
 		return canMove;
