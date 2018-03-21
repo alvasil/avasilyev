@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
-public class Array implements SimpleContainer {
+public class Array<E> implements SimpleContainer<E> {
 	private Object[] container;
 	private int index = 0;
 	private int modCount = 0;
@@ -14,23 +14,23 @@ public class Array implements SimpleContainer {
 	}
 
 	@Override
-	public void add(Object o) {
+	public void add(E value) {
 		if (index < this.container.length) {
-			this.container[index++] = o;
+			this.container[index++] = value;
 			this.modCount++;
 			return;
 		}
 		if (index >= this.container.length) {
 			Object[] newContainer = Arrays.copyOf(this.container, index + 1);
-			newContainer[index++] = o;
+			newContainer[index++] = value;
 			this.container = newContainer;
 			this.modCount++;
 		}
 	}
 
 	@Override
-	public Object get(int index) {
-		return this.container[index];
+	public E get(int index) {
+		return (E) this.container[index];
 	}
 
 	@Override
