@@ -5,13 +5,13 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class NodeTest {
+public class NodeCycleTest {
 	@Test
 	public void whenCycled() {
-		Node one = new Node<>(1);
-		Node two = new Node<>(2);
-		Node three = new Node<>(3);
-		Node four = new Node<>(4);
+		NodeCycle one = new NodeCycle<>(1);
+		NodeCycle two = new NodeCycle<>(2);
+		NodeCycle three = new NodeCycle<>(3);
+		NodeCycle four = new NodeCycle<>(4);
 		one.next = two;
 		two.next = three;
 		three.next = four;
@@ -21,10 +21,10 @@ public class NodeTest {
 
 	@Test
 	public void whenNotCycled() {
-		Node one = new Node<>(1);
-		Node two = new Node<>(2);
-		Node three = new Node<>(3);
-		Node four = new Node<>(4);
+		NodeCycle one = new NodeCycle<>(1);
+		NodeCycle two = new NodeCycle<>(2);
+		NodeCycle three = new NodeCycle<>(3);
+		NodeCycle four = new NodeCycle<>(4);
 		one.next = two;
 		two.next = three;
 		three.next = four;
@@ -33,10 +33,10 @@ public class NodeTest {
 
 	@Test
 	public void whenCycledInMid() {
-		Node one = new Node<>(1);
-		Node two = new Node<>(2);
-		Node three = new Node<>(3);
-		Node four = new Node<>(4);
+		NodeCycle one = new NodeCycle<>(1);
+		NodeCycle two = new NodeCycle<>(2);
+		NodeCycle three = new NodeCycle<>(3);
+		NodeCycle four = new NodeCycle<>(4);
 		one.next = two;
 		two.next = three;
 		three.next = two;
