@@ -6,11 +6,23 @@ import java.util.Iterator;
 public abstract class AbstractLinked<E> implements Iterable {
 	private Node<E> first;
 	private Node<E> last;
-	private int size = 0;
+	public int size = 0;
 	private int modCount = 0;
 
 	public Node<E> getFirst() {
 		return first;
+	}
+
+	public void setFirst(Node<E> first) {
+		this.first = first;
+	}
+
+	public Node<E> getLast() {
+		return last;
+	}
+
+	public void setLast(Node<E> last) {
+		this.last = last;
 	}
 
 	public int getSize() {

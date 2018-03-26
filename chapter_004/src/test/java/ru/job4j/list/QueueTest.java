@@ -17,7 +17,7 @@ public class QueueTest {
 		queue.poll(); // 1
 		queue.poll(); // 2
 		queue.poll(); // 3
-		assertThat(queue.first, is(queue.last)); // 4 = 4
+		assertThat(queue.getFirst(), is(queue.getLast())); // 4 = 4
 		assertThat(queue.getSize(), is(1));
 	}
 }

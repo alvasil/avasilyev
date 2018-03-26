@@ -17,7 +17,7 @@ public class StackTest {
 		stack.poll();
 		stack.poll();
 		stack.poll();
-		assertThat(stack.last, is(stack.first)); // 11 = 11
+		assertThat(stack.getLast(), is(stack.getFirst())); // 11 = 11
 		assertThat(stack.getSize(), is(1));
 	}
 }
