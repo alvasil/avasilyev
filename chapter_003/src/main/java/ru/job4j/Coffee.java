@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 public class Coffee {
-	private final int ten = 10;
-	private final int five = 5;
-	private final int two = 2;
-	private final int one = 1;
+	private int ten = 10;
+	private int five = 5;
+	private int two = 2;
+	private int one = 1;
 
 	/**
 	 * Метод должен вернуть наименьшее количество монет.
