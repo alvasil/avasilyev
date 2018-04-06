@@ -2,14 +2,12 @@ package ru.job4j.set;
 
 import java.util.Arrays;
 
+import static java.util.Objects.hash;
+
 public class SetHash<E> {
-	//массив для хранения элементов
 	private Item[] hashTable;
-	// размер таблицы
 	public int size;
-	//количество добавленных элементов в массив
 	private int count;
-	//вспомогательная переменная для генерации хэш-ключа
 	private int index;
 
 	public SetHash(int size) {
@@ -31,9 +29,9 @@ public class SetHash<E> {
 			hashTable[hash] = item;
 			count++;
 		} else {
-			Item[] newTable = Arrays.copyOf(this.hashTable, size * 2);
-			newTable[size++] = item;
+			Item[] newTable = Arrays.copyOf(this.hashTable, size * 10);
 			this.hashTable = newTable;
+			this.hashTable[hash] = item;
 			count++;
 		}
 		return result;
@@ -41,11 +39,8 @@ public class SetHash<E> {
 
 	boolean contains(E value) {
 		boolean result = false;
-		for (Item e : hashTable) {
-			if (e != null && e.getKey().equals(value)) {
-				result = true;
-				break;
-			}
+		if (hash(value) < hashTable.length && hashTable[hash(value)] != null) {
+			result = true;
 		}
 		return result;
 	}
@@ -61,12 +56,6 @@ public class SetHash<E> {
 		}
 		count--;
 		return result;
-	}
-
-	public int hash(E key) {
-		int hash = (Integer) key % size + index;
-		index++;
-		return hash;
 	}
 
 

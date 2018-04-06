@@ -14,7 +14,7 @@ public class SetHashTest {
 			set.add(3); // не должны попасть в массив
 			set.add(5); // не должны попасть в массив
 			set.add(7); // не должны попасть в массив
-			System.out.println("element: " + i + " hash: " + set.hash(i));
+			System.out.println("element: " + i);
 		}
 	}
 
