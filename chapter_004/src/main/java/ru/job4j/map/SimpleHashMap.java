@@ -6,22 +6,9 @@ import java.util.Objects;
 
 import static java.util.Objects.hash;
 
-/**
- * Внутренняя реализация должна использовать массив.
- * Нужно обеспечить фиксированное время вставки и получение.
- * Предусмотрите возможность роста хэш-таблицы при нехватке места для нового элемента.
- * <p>
- * Методы разрешения коллизий реализовывать не надо. Например: если при добавлении ключ уже есть, то возвращать false.
- *
- * @param <K> - ключ
- * @param <V> - значение
- */
 public class SimpleHashMap<K, V> implements Iterable {
-	//массив для хранения элементов
 	private Item[] hashTable;
-	// размер таблицы
 	private int size;
-	//количество добавленных элементов в массив
 	private int count;
 
 	public SimpleHashMap(int size) {
@@ -29,17 +16,23 @@ public class SimpleHashMap<K, V> implements Iterable {
 		this.hashTable = new Item[size];
 	}
 
+	/**
+	 * Метод вставляет элемент на позицию hash в таблице
+	 * Таблица расширяется при недостатке места для элемента
+	 *
+	 * @param key   - ключ
+	 * @param value - значение
+	 * @return - false, если ключ уже есть
+	 */
 	boolean insert(K key, V value) {
 		boolean result = true;
 		Item item = new Item(value);
-		// проверка на идентичность ключа key. Если уже есть - возвращаем false
 		for (int i = 0; i < hashTable.length; i++) {
 			if (hashTable[i] != null && hash(key) == i) {
 				result = false;
 				break;
 			}
 		}
-		// рассчитываем хеш для ключа key
 		int hash = hash(key);
 		if (hash < size) {
 			hashTable[hash] = item;
@@ -102,7 +95,6 @@ public class SimpleHashMap<K, V> implements Iterable {
 	}
 
 	class Item<K> {
-
 		private K value;
 
 		public Item(K key) {
