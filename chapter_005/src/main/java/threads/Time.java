@@ -13,8 +13,7 @@ public class Time implements Runnable {
 		long startTime = System.currentTimeMillis();
 		count.start();
 		if (System.currentTimeMillis() - startTime > setTime) {
-			System.out.println("INTERRUPTED");
-			Thread.currentThread().interrupt();
+			count.interrupt();
 		}
 	}
 
@@ -32,15 +31,19 @@ public class Time implements Runnable {
 		@Override
 		public void run() {
 			for (char i : text.toCharArray()) {
-				count++;
+				if (!Thread.currentThread().isInterrupted()) {
+					count++;
+				} else {
+					return;
+				}
 			}
 			System.out.println(text);
 			System.out.printf("Number of symbols with spaces: %d\n", count);
+
 		}
 	}
 
-
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 		Thread thread = new Thread(new Time(100));
 		thread.start();
 	}
