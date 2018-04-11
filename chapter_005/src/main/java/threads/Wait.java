@@ -10,13 +10,13 @@ public class Wait {
 				i++;
 			}
 			System.out.println(i);
+			System.out.println("End program.");
 		}
 	}
 
 	public static void main(String[] args) {
-		System.out.println("Information about program");
 		Thread cycle = new Thread(new Cycling());
+		System.out.println("Starting program...");
 		cycle.start();
-		System.out.println("End program");
 	}
 }
