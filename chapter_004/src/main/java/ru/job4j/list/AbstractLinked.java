@@ -1,35 +1,46 @@
 package ru.job4j.list;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
+@ThreadSafe
 public abstract class AbstractLinked<E> implements Iterable {
+	@GuardedBy("this")
 	private Node<E> first;
+
+	@GuardedBy("this")
 	private Node<E> last;
+
+	@GuardedBy("this")
 	public int size = 0;
+
+	@GuardedBy("this")
 	private int modCount = 0;
 
-	public Node<E> getFirst() {
+	public synchronized Node<E> getFirst() {
 		return first;
 	}
 
-	public void setFirst(Node<E> first) {
+	public synchronized void setFirst(Node<E> first) {
 		this.first = first;
 	}
 
-	public Node<E> getLast() {
+	public synchronized Node<E> getLast() {
 		return last;
 	}
 
-	public void setLast(Node<E> last) {
+	public synchronized void setLast(Node<E> last) {
 		this.last = last;
 	}
 
-	public int getSize() {
+	public synchronized int getSize() {
 		return size;
 	}
 
-	public void add(E value) {
+	public synchronized void add(E value) {
 		Node<E> newNode = new Node<>(last, value, null);
 		if (newNode.getPrev() == null) {
 			this.first = newNode;
@@ -42,7 +53,7 @@ public abstract class AbstractLinked<E> implements Iterable {
 	}
 
 	@Override
-	public Iterator iterator() {
+	public synchronized Iterator iterator() {
 		return new Iterator() {
 			private Node<E> current;
 			int expectedModCount = modCount;
@@ -55,7 +66,7 @@ public abstract class AbstractLinked<E> implements Iterable {
 			}
 
 			@Override
-			public E next() {
+			public synchronized E next() {
 				checkForModification();
 				if (nextCount == 0) {
 					current = first;
@@ -66,7 +77,7 @@ public abstract class AbstractLinked<E> implements Iterable {
 				return current.element;
 			}
 
-			final void checkForModification() {
+			final synchronized void checkForModification() {
 				if (modCount != expectedModCount) {
 					throw new ConcurrentModificationException();
 				}

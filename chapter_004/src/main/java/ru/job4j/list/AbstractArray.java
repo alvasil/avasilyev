@@ -1,23 +1,32 @@
 package ru.job4j.list;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
+@ThreadSafe
 public abstract class AbstractArray<E> implements Iterable {
+	@GuardedBy("this")
 	private Object[] container;
+
+	@GuardedBy("this")
 	public int index = 0;
+
+	@GuardedBy("this")
 	public int modCount = 0;
 
-	public Object[] getContainer() {
+	public synchronized Object[] getContainer() {
 		return container;
 	}
 
-	public void setContainer(Object[] container) {
+	public synchronized void setContainer(Object[] container) {
 		this.container = container;
 	}
 
-	public void add(E value) {
+	public synchronized void add(E value) {
 		if (index < this.container.length) {
 			this.container[index++] = value;
 			this.modCount++;
@@ -32,13 +41,13 @@ public abstract class AbstractArray<E> implements Iterable {
 	}
 
 	@Override
-	public Iterator iterator() {
+	public synchronized Iterator iterator() {
 		return new Iterator() {
 			int expectedModCount = modCount;
 			int i = 0;
 
 			@Override
-			public boolean hasNext() {
+			public synchronized boolean hasNext() {
 				boolean result = false;
 				checkForModification();
 				if (container[i + 1] != null) {
@@ -48,12 +57,12 @@ public abstract class AbstractArray<E> implements Iterable {
 			}
 
 			@Override
-			public Object next() {
+			public synchronized Object next() {
 				checkForModification();
 				return container[i++];
 			}
 
-			final void checkForModification() {
+			final synchronized void checkForModification() {
 				if (modCount != expectedModCount) {
 					throw new ConcurrentModificationException();
 				}
