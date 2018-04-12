@@ -52,16 +52,10 @@ public class UserStorage {
 				} else {
 					throw new UnsupportedOperationException("not enough money");
 				}
-			} else {
-				throw new UnsupportedOperationException("no fromId User");
 			}
-
 			if (some.getId() == toId) {
 				some.setAmount(some.getAmount() + amount);
-			} else {
-				throw new UnsupportedOperationException("no toId User");
 			}
-
 		}
 	}
 }
