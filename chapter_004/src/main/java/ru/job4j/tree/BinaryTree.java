@@ -1,28 +1,60 @@
 package ru.job4j.tree;
 
-public class BinaryTree<E extends Comparable<E>> {
-	private BinaryTree<E> left;
-	private BinaryTree<E> right;
-	private E data;
+import java.util.Iterator;
+import java.util.Stack;
 
+public class BinaryTree<E extends Comparable<E>> implements Iterable {
+	private BNode<E> root;
 
-	public BinaryTree(E data) {
-		this.data = data;
+	public void add(E value) {
+		BNode<E> nodeToAdd = new BNode<>(value);
+		if (root == null) {
+			root = nodeToAdd;
+		}
+		traverse(root, nodeToAdd);
 	}
 
-	public void add(E e) {
-		if (data.compareTo(e) < 0) { //e больше data
-			if (right == null) {
-				right = new BinaryTree<>(e);
+	private void traverse(BNode<E> node, BNode<E> noteToAdd) {
+		if (noteToAdd.value.compareTo(node.value) < 0) {
+			if (node.left == null) {
+				node.left = noteToAdd;
 			} else {
-				right.add(e);
+				traverse(node.left, noteToAdd);
 			}
-		} else {                    // е меньше data
-			if (left == null) {
-				left = new BinaryTree<>(e);
-			} else {
-				left.add(e);
+		} else {
+			if (noteToAdd.value.compareTo(node.value) > 0) {
+				if (node.right == null) {
+					node.right = noteToAdd;
+				} else {
+					traverse(node.right, noteToAdd);
+				}
 			}
 		}
+	}
+
+	@Override
+	public Iterator iterator() {
+		return new Iterator() {
+			BNode<E> current = root;
+			Stack<BNode<E>> stack = new Stack<>();
+
+			@Override
+			public boolean hasNext() {
+				return (!stack.isEmpty() || current != null);
+			}
+
+			@Override
+			public E next() {
+				while (current != null) {
+					stack.push(current);
+					current = current.left;
+				}
+				current = stack.pop();
+				BNode<E> node = current;
+				current = current.right;
+				return node.value;
+
+			}
+		};
 	}
 }
