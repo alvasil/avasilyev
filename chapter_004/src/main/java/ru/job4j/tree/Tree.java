@@ -11,30 +11,21 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
 	}
 
 	/**
-	 * Метод должен проверять количество дочерних элементов в дереве.
-	 * Если их <= 2 - то дерево бинарное.
+	 * Проверяет количество дочерних элементов в дереве.
 	 *
-	 * @return - true, если дочек <= 2
+	 * @return - {@code true}, если дочек <= 2.
 	 */
 	public boolean isBinary() {
 		boolean result = false;
-		if (this.root.getChildren().size() <= 2) {
-			result = true;
-			if (this.root.getChildren().size() != 0) {
-				Node<E> current = this.root;
-				while (current.getChildren().size() > 0) {
-					for (Node e : current.getChildren()) {
-						if (e.getChildren().size() <= 2) {
-							result = true;
-							current = e;
-							break;
-						} else {
-							result = false;
-						}
-					}
+		Node<E> current = this.root;
+		if (current.getChildren().size() <= 2) {
+			while (current.getChildren().size() > 0) {
+				for (Node<E> e : current.getChildren()) {
+					result = (e.getChildren().size() <= 2);
+					current = e;
+					break;
 				}
 			}
-
 		}
 		return result;
 	}
@@ -42,24 +33,11 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
 	@Override
 	public boolean add(E parent, E child) {
 		boolean result = false;
-		if (this.root.eqValue(parent)) {
-			if (!this.root.haveDoubles(child)) {
-				this.root.add(new Node<>(child));
-				count++;
-				result = true;
-			} else {
-				result = false;
-			}
-		} else {
-			if (findBy(child).isPresent()) {
-				result = false;
-			} else {
-				if (findBy(parent).isPresent()) {
-					Node<E> current = findBy(parent).orElse(new Node<>(parent));
-					current.add(new Node<>(child));
-					count++;
-				}
-			}
+		if (findBy(parent).isPresent() && !findBy(child).isPresent()) {
+			Node<E> current = findBy(parent).orElse(new Node<>(parent));
+			current.add(new Node<>(child));
+			count++;
+			result = true;
 		}
 		return result;
 	}

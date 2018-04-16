@@ -7,11 +7,6 @@ import java.util.Iterator;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
-/**
- * @author Petr Arsentev (parsentev@yandex.ru)
- * @version $Id$
- * @since 0.1
- */
 public class TreeTest {
 	@Test
 	public void when6ElFindLastThen6() {
