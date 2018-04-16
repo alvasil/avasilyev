@@ -3,6 +3,7 @@ package ru.job4j.trading;
 import java.util.*;
 
 public class OrderBook {
+
 	private Map<String, Map<Order.Action, List<Order>>> stocks;
 
 	public OrderBook() {
@@ -30,7 +31,8 @@ public class OrderBook {
 	};
 
 	/**
-	 * метод добавляет стакан в систему (эмитент, без заявок)
+	 * Добавляет стакан в систему (эмитент, без заявок).
+	 * Создает в стакане 2 списка: BID/ASK
 	 *
 	 * @param order - стакан эмитента
 	 */
@@ -42,111 +44,68 @@ public class OrderBook {
 	}
 
 	/**
-	 * метод добавляет заявку в стакан эмитента
-	 * выбирает куда добавить: BID/ASK
-	 * если заявка типа DELETE, то удаляет заявку с параметрами из листа BID или ASK
+	 * Добавляет заявку в стакан эмитента.
+	 * Стакан имеет списки: BID (сортировка по возрастанию) и ASK (сортировка по убыванию).
+	 * Если заявка типа DELETE, то удаляет заявку с параметрами из листа BID или ASK.
 	 *
 	 * @param order - заявка эмитента
 	 */
 	public void addOrder(Order order) {
+		List<Order> bookAsk = this.stocks.get(order.book).get(Order.Action.ASK);
+		List<Order> bookBid = this.stocks.get(order.book).get(Order.Action.BID);
+
 		if (order.type == Order.Type.ADD) {
 			if (order.action == Order.Action.BID) {
-				for (String e : this.stocks.keySet()) {
-					if (e.equals(order.book)) {
-						for (Order asks : this.stocks.get(e).get(Order.Action.ASK)) {
-							if (asks.price <= order.price && asks.volume == order.volume) {
-								this.stocks.get(e).get(Order.Action.ASK).remove(asks);
-								return;
-							}
-
-						}
+				for (Order asks : bookAsk) {
+					if (asks.price <= order.price && asks.volume == order.volume) {
+						bookAsk.remove(asks);
+						return;
 					}
 				}
-				findBid(order).add(order);
-				findBid(order).sort(ascending); //bid сортируем по возрастанию
+				bookBid.add(order);
+				bookBid.sort(ascending);
 			} else {
-				for (String e : this.stocks.keySet()) {
-					if (e.equals(order.book)) {
-						for (Order bids : this.stocks.get(e).get(Order.Action.BID)) {
-							if (bids.price >= order.price && bids.volume == order.volume) {
-								this.stocks.get(e).get(Order.Action.BID).remove(bids);
-								return;
-							}
-
-						}
+				for (Order bids : bookBid) {
+					if (bids.price >= order.price && bids.volume == order.volume) {
+						bookBid.remove(bids);
+						return;
 					}
 				}
-				findAsk(order).add(order);
-				findAsk(order).sort(descending); //ask сортируем по убыванию
+				bookAsk.add(order);
+				bookAsk.sort(descending);
 			}
 
-		} else {                                // если заявки типа DELETE
+		} else {
 			if (order.action == Order.Action.BID) {
-				for (Order bidOrder : findBid(order)) {
+				for (Order bidOrder : bookBid) {
 					if (bidOrder.price == order.price) {
-						findBid(order).remove(bidOrder);
+						bookBid.remove(bidOrder);
 						break;
 					}
 				}
 			} else {
-				for (Order askOrder : findAsk(order)) {
+				for (Order askOrder : bookAsk) {
 					if (askOrder.price == order.price) {
-						findAsk(order).remove(askOrder);
+						bookAsk.remove(askOrder);
 						break;
 					}
 				}
 			}
 		}
-	}
-
-	/**
-	 * метод ищет лист BID по типу заявки
-	 *
-	 * @param order - заявка
-	 * @return - лист BID
-	 */
-	public List<Order> findBid(Order order) {
-		List<Order> result = null;
-		for (String e : this.stocks.keySet()) {
-			if (e.equals(order.book)) {
-				if (order.action == Order.Action.BID) {
-					result = this.stocks.get(e).get(Order.Action.BID);
-				}
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * метод ищет лист ASK по типу заявки
-	 *
-	 * @param order - заявка
-	 * @return - лист ASK
-	 */
-	public List<Order> findAsk(Order order) {
-		List<Order> result = null;
-		for (String e : this.stocks.keySet()) {
-			if (e.equals(order.book)) {
-				if (order.action == Order.Action.ASK) {
-					result = this.stocks.get(e).get(Order.Action.ASK);
-				}
-			}
-		}
-		return result;
 	}
 
 	public void show(Order order) {
 		StringBuilder builder = new StringBuilder();
-		for (String e : this.stocks.keySet()) {
-			if (e.equals(order.book)) {
-				for (Order orders : this.stocks.get(e).get(Order.Action.BID)) {
-					builder.append(String.format("%s %d | %d$ |\n", orders.action, orders.volume, orders.price));
-				}
-				for (Order orders : this.stocks.get(e).get(Order.Action.ASK)) {
-					builder.append(String.format("        | %d$ | %d %s\n", orders.price, orders.volume, orders.action));
-				}
-			}
+		for (Order orders : this.stocks.get(order.book).get(Order.Action.BID)) {
+			builder.append(String.format("%s %d | %d$ |\n", orders.action, orders.volume, orders.price));
+		}
+		for (Order orders : this.stocks.get(order.book).get(Order.Action.ASK)) {
+			builder.append(String.format("        | %d$ | %d %s\n", orders.price, orders.volume, orders.action));
 		}
 		System.out.println("**" + order.book + "**" + "\n" + builder);
+	}
+
+	public Map<String, Map<Order.Action, List<Order>>> getStocks() {
+		return stocks;
 	}
 }

@@ -2,65 +2,70 @@ package ru.job4j.trading;
 
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertTrue;
+
+
 public class OrderBookTest {
+
 	@Test
-	public void whenAddOrdersToBook() {
+	public void whenAddOrdersThenBookFilledWithOrders() {
 		OrderBook book = new OrderBook();
 		Order gazprom = new Order("GAZPROM");
 		Order lukoil = new Order("LUKOIL");
-		Order rosneft = new Order("ROSNEFT");
 		book.addToBook(gazprom);
 		book.addToBook(lukoil);
-		book.addToBook(rosneft);
 
-		/**
-		 * проверка на работу заявок типа ADD/DELETE
-		 */
+		assertThat(book.getStocks().size(), is(2));
+
 		Order gazBid1 = new Order(1, "GAZPROM", Order.Type.ADD, Order.Action.BID, 120, 100);
 		Order gazAsk1 = new Order(5, "GAZPROM", Order.Type.ADD, Order.Action.ASK, 125, 200);
-		Order gazDeleteBid1 = new Order(2, "GAZPROM", Order.Type.DELETE, Order.Action.BID, 120, 100);
-		Order gazDeleteAsk1 = new Order(5, "GAZPROM", Order.Type.DELETE, Order.Action.ASK, 125, 200);
-
 		book.addOrder(gazBid1);
-		book.addOrder(gazDeleteBid1); //удаляет gazBid1
 		book.addOrder(gazAsk1);
-		book.addOrder(gazDeleteAsk1); //удаляет gazAsk1
 
-		book.show(gazprom); // пустой стакан
+		assertTrue(book.getStocks().get("GAZPROM").get(Order.Action.BID).contains(gazBid1));
+		assertTrue(book.getStocks().get("GAZPROM").get(Order.Action.ASK).contains(gazAsk1));
+	}
 
-		/**
-		 * проверка на работу заявок, которые могут быть совмещены при добавлении:
-		 * ASK.price < = BID.price и наоборот
-		 */
-		Order lukAsk1 = new Order(1, "LUKOIL", Order.Type.ADD, Order.Action.ASK, 40, 100);
-		Order lukBid1 = new Order(2, "LUKOIL", Order.Type.ADD, Order.Action.BID, 50, 100);
-		Order lukBid2 = new Order(3, "LUKOIL", Order.Type.ADD, Order.Action.BID, 70, 100);
-		Order lukAsk2 = new Order(4, "LUKOIL", Order.Type.ADD, Order.Action.ASK, 40, 100);
-		book.addOrder(lukAsk1);
-		book.addOrder(lukBid1); //удаляет lukAsk1, т.к. заявки можно совместить
-		book.addOrder(lukBid2);
-		book.addOrder(lukAsk2); //удаляет lukBid2, т.к. заявки можно совместить
+	@Test
+	public void whenBookHaveOrderTypesDeleteThenNoOrdersInBook() {
+		OrderBook book = new OrderBook();
+		book.addToBook(new Order("GAZPROM"));
+		book.addOrder(new Order(1, "GAZPROM", Order.Type.ADD, Order.Action.BID, 120, 100));
+		book.addOrder(new Order(2, "GAZPROM", Order.Type.DELETE, Order.Action.BID, 120, 100));
 
-		book.show(lukoil); //пустой стакан
+		assertThat(book.getStocks().get("GAZPROM").get(Order.Action.BID).size(), is(0));
+		assertThat(book.getStocks().get("GAZPROM").get(Order.Action.ASK).size(), is(0));
+	}
 
-		/**
-		 * демонтрация обычного наполненого стакана
-		 */
-		Order rosneftBid1 = new Order(11, "ROSNEFT", Order.Type.ADD, Order.Action.BID, 500, 300);
-		Order rosneftBid2 = new Order(12, "ROSNEFT", Order.Type.ADD, Order.Action.BID, 505, 400);
-		Order rosneftBid3 = new Order(13, "ROSNEFT", Order.Type.ADD, Order.Action.BID, 495, 200);
-		Order rosneftAsk1 = new Order(21, "ROSNEFT", Order.Type.ADD, Order.Action.ASK, 510, 100);
-		Order rosneftAsk2 = new Order(22, "ROSNEFT", Order.Type.ADD, Order.Action.ASK, 515, 200);
-		Order rosneftAsk3 = new Order(23, "ROSNEFT", Order.Type.ADD, Order.Action.ASK, 525, 300);
-		book.addOrder(rosneftBid1);
-		book.addOrder(rosneftBid2);
-		book.addOrder(rosneftBid3);
-		book.addOrder(rosneftAsk1);
-		book.addOrder(rosneftAsk2);
-		book.addOrder(rosneftAsk3);
+	@Test
+	public void whenOrdersCanBeMatchedThenEmptyOrderBook() {
+		OrderBook book = new OrderBook();
+		book.addToBook(new Order("LUKOIL"));
+
+		book.addOrder(new Order(1, "LUKOIL", Order.Type.ADD, Order.Action.ASK, 40, 100));
+		book.addOrder(new Order(2, "LUKOIL", Order.Type.ADD, Order.Action.BID, 50, 100));
+		book.addOrder(new Order(3, "LUKOIL", Order.Type.ADD, Order.Action.BID, 70, 100));
+		book.addOrder(new Order(4, "LUKOIL", Order.Type.ADD, Order.Action.ASK, 40, 100));
+
+		assertThat(book.getStocks().get("LUKOIL").get(Order.Action.BID).size(), is(0));
+		assertThat(book.getStocks().get("LUKOIL").get(Order.Action.ASK).size(), is(0));
+	}
+
+	@Test
+	public void demoFilledWithOrdersBook() {
+		OrderBook book = new OrderBook();
+		Order rosneft = new Order("ROSNEFT");
+		book.addToBook(rosneft);
+
+		book.addOrder(new Order(11, "ROSNEFT", Order.Type.ADD, Order.Action.BID, 500, 300));
+		book.addOrder(new Order(12, "ROSNEFT", Order.Type.ADD, Order.Action.BID, 505, 400));
+		book.addOrder(new Order(13, "ROSNEFT", Order.Type.ADD, Order.Action.BID, 495, 200));
+		book.addOrder(new Order(21, "ROSNEFT", Order.Type.ADD, Order.Action.ASK, 510, 100));
+		book.addOrder(new Order(22, "ROSNEFT", Order.Type.ADD, Order.Action.ASK, 515, 200));
+		book.addOrder(new Order(23, "ROSNEFT", Order.Type.ADD, Order.Action.ASK, 525, 300));
 
 		book.show(rosneft);
-
-
 	}
 }
