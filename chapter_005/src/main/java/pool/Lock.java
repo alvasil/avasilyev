@@ -1,13 +1,16 @@
 package pool;
 
+import net.jcip.annotations.GuardedBy;
+
 public class Lock {
+	@GuardedBy("this")
 	private boolean isLocked;
 
 	/**
 	 * Проверяет свободен ли лок.
-	 * Если да - захватывает, иначе блокируется
+	 * Если да - захватывает, иначе блокируется.
 	 */
-	public void lock() throws InterruptedException {
+	public synchronized void lock() throws InterruptedException {
 		while (isLocked) {
 			wait();
 		}
@@ -16,9 +19,9 @@ public class Lock {
 
 	/**
 	 * Проверяет владеет ли поток локом.
-	 * Если да то - освобождает.
+	 * Если да - освобождает.
 	 */
-	public void unlock() {
+	public synchronized void unlock() {
 		if (isLocked) {
 			notifyAll();
 		}
