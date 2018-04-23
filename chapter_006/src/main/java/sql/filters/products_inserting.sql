@@ -1,0 +1,10 @@
+﻿insert into product (name, type_id, expired_date, price) values ('янтарь', '1', '2018-05-05 23:59:59', 150);
+insert into product (name, type_id, expired_date, price) values ('комета', '1', '2018-06-06 23:59:59', 200);
+insert into product (name, type_id, expired_date, price) values ('бежин луг', '2', '2018-04-30 23:59:59', 50);
+insert into product (name, type_id, expired_date, price) values ('домик в деревне', '2', '2018-04-30 23:59:59', 60);
+insert into product (name, type_id, expired_date, price) values ('помидоры', '3', '2018-05-05 23:59:59', 80);
+insert into product (name, type_id, expired_date, price) values ('огурцы', '3', '2018-05-05 23:59:59', 70);
+insert into product (name, type_id, expired_date, price) values ('яблоки', '4', '2018-05-30 23:59:59', 140);
+insert into product (name, type_id, expired_date, price) values ('бананы', '4', '2018-05-30 23:59:59', 110);
+insert into product (name, type_id, expired_date, price) values ('говядина', '5', '2018-05-25 23:59:59', 400);
+insert into product (name, type_id, expired_date, price) values ('свинина', '5', '2018-05-25 23:59:59', 330);
