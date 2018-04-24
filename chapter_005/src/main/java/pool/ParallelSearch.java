@@ -6,10 +6,7 @@ import net.jcip.annotations.ThreadSafe;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 @ThreadSafe
 public class ParallelSearch {
@@ -22,7 +19,7 @@ public class ParallelSearch {
 	private final Queue<String> files = new LinkedList<>();
 
 	@GuardedBy("this")
-	private final List<String> paths = new ArrayList<>();
+	private final Queue<String> paths = new ArrayDeque<>();
 
 
 	public ParallelSearch(String root, String text, List<String> exts) {
@@ -56,12 +53,8 @@ public class ParallelSearch {
 			public synchronized void run() {
 				while (!finish) {
 					if (!files.isEmpty()) {
-						for (String e : files) {
-							if (e.contains(text)) {
-								paths.add(e);
-								files.remove(e);
-							}
-						}
+						paths.add(files.peek());
+						files.poll();
 					}
 				}
 			}
@@ -72,7 +65,7 @@ public class ParallelSearch {
 		read.join();
 	}
 
-	synchronized List<String> result() {
+	synchronized Queue<String> result() {
 		return this.paths;
 	}
 
@@ -84,7 +77,7 @@ public class ParallelSearch {
 		@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 			for (String exp : exts) {
-				if (file.toString().endsWith(exp)) {
+				if (file.toString().endsWith(exp) && file.toString().contains(text)) {
 					synchronized (files) {
 						files.offer(file.toString());
 					}
