@@ -6,15 +6,19 @@ public class Lock {
 	@GuardedBy("this")
 	private boolean isLocked;
 
+	private Thread owner;
+
 	/**
 	 * Проверяет свободен ли лок.
 	 * Если да - захватывает, иначе блокируется.
 	 */
 	public synchronized void lock() throws InterruptedException {
+		Thread current = Thread.currentThread();
 		while (isLocked) {
 			wait();
 		}
 		isLocked = true;
+		owner = current;
 	}
 
 	/**
@@ -22,7 +26,7 @@ public class Lock {
 	 * Если да - освобождает.
 	 */
 	public synchronized void unlock() {
-		if (isLocked) {
+		if (isLocked && owner == Thread.currentThread()) {
 			notifyAll();
 		}
 		isLocked = false;
